@@ -22,7 +22,10 @@ def list_datasets(request):
 
 @api_view(['GET'])
 def preview_datasets(request, dataset_id):
-    dataset = Dataset.objects.get(id=dataset_id)
+    try:
+        dataset = Dataset.objects.get(id=dataset_id)
+    except Dataset.DoesNotExist:
+        return Response({'error': 'Dataset not found'}, status=status.HTTP_404_NOT_FOUND)
     if dataset.uploaded_by != request.user:
         return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
     df = pd.read_csv(dataset.file.path)
@@ -35,7 +38,10 @@ def preview_datasets(request, dataset_id):
     
 @api_view(['GET'])
 def summarize_datasets(request, dataset_id):
-    dataset = Dataset.objects.get(id=dataset_id)
+    try:
+        dataset = Dataset.objects.get(id=dataset_id)
+    except Dataset.DoesNotExist:
+        return Response({'error': 'Dataset not found'}, status=status.HTTP_404_NOT_FOUND)
     if dataset.uploaded_by != request.user:
         return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
     df = pd.read_csv(dataset.file.path)
