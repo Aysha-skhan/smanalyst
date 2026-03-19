@@ -33,6 +33,18 @@ def preview_datasets(request, dataset_id):
     'rows': data
 })
     
+@api_view(['GET'])
+def summarize_datasets(request, dataset_id):
+    dataset = Dataset.objects.get(id=dataset_id)
+    if dataset.uploaded_by != request.user:
+        return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+    df = pd.read_csv(dataset.file.path)
+    null_vals=df.isnull().sum().sum() 
+    describe_by_pandas=df.describe().to_dict()
+    return Response({
+    'Null values in Dataset': null_vals,
+    'Overall Statistics': describe_by_pandas
+})
         
 
 
