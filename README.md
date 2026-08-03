@@ -1,1 +1,1 @@
-SmartAnalyst - smanalyst
+SmartAnalyst 
