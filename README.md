@@ -1,2 +1,1 @@
-SmartAnalyst-SmA
-
+SmartAnalyst
